@@ -26,7 +26,6 @@ mkdir connecto
 # Copy the mod files to the correct structure
 echo "📋 Copying mod files..."
 cp -r "$SCRIPT_DIR/lib" connecto/
-cp "$SCRIPT_DIR/config.lua" connecto/
 
 # Set permissions
 echo "🔐 Setting permissions..."
@@ -39,7 +38,6 @@ echo "Mod structure:"
 echo "~/dust/mods/connecto/"
 echo "├── lib/"
 echo "│   └── mod.lua          # Main mod file (REQUIRED)"
-echo "└── config.lua"
 echo ""
 echo "Next steps:"
 echo "1. Restart your Norns (SYSTEM → RESTART)"

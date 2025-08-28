@@ -26,7 +26,6 @@ if [[ "$(hostname)" == "norns" ]]; then
     echo "📁 Installing mod files..."
     mkdir connecto
     cp -r "$SCRIPT_DIR/lib" connecto/
-    cp "$SCRIPT_DIR/config.lua" connecto/
     
     echo "✓ Mod files copied successfully"
     
@@ -39,7 +38,6 @@ if [[ "$(hostname)" == "norns" ]]; then
     echo "~/dust/mods/connecto/"
     echo "├── lib/"
     echo "│   └── mod.lua          # Main mod file (REQUIRED)"
-    echo "└── config.lua"
     echo ""
     echo "To use the mod:"
     echo "1. Restart your Norns (SYSTEM → RESTART)"
