@@ -44,40 +44,139 @@ end
 -- Parse device names from ALSA output
 local function valid_device_name(devices_list)
   local devices = {}
+  local raw_output = ""
+  
+  -- First, let's see what we're actually getting
   repeat
     local raw_list = devices_list:read("*l")
     if raw_list then
+      raw_output = raw_output .. raw_list .. "\n"
       local words = {}
       for word in raw_list:gmatch("%S+") do 
         table.insert(words, word) 
       end
+      
+      -- More robust device detection
       if (words[1] == "card") then 
         if not (words[3] == "sndrpimonome" or words[3] == nil) then
           table.insert(devices, words[3])
         end
       end
+      
+      -- Alternative detection for USB devices
+      if raw_list:match("USB") or raw_list:match("Audio") then
+        local card_match = raw_list:match("card (%d+)")
+        if card_match then
+          local card_num = tonumber(card_match)
+          if card_num and card_num > 0 then
+            -- Try to get the device name from /proc/asound/card*/id
+            local card_id_file = io.open("/proc/asound/card" .. card_num .. "/id", "r")
+            if card_id_file then
+              local card_id = card_id_file:read("*l")
+              card_id_file:close()
+              if card_id and card_id ~= "sndrpimonome" then
+                -- Check if we already have this device
+                local already_exists = false
+                for _, existing in ipairs(devices) do
+                  if existing == card_id then
+                    already_exists = true
+                    break
+                  end
+                end
+                if not already_exists then
+                  table.insert(devices, card_id)
+                end
+              end
+            end
+          end
+        end
+      end
     end
   until not raw_list
+  
+  -- Debug output
+  print("Connecto Mod: Raw ALSA output:")
+  print(raw_output)
+  print("Connecto Mod: Parsed devices:", table.concat(devices, ", "))
+  
   return devices
 end
 
 -- Refresh list of available audio devices
 local function refresh_list_of_devices()
   local device_index = 0
+  
+  print("Connecto Mod: Starting device detection...")
+  
   -- List all connected sound devices
-  local get_inputs_list = io.popen('arecord -l')
-  local get_outputs_list = io.popen('aplay -l')
+  local get_inputs_list = io.popen('arecord -l 2>&1')
+  local get_outputs_list = io.popen('aplay -l 2>&1')
+  
+  -- Also try alternative detection methods
+  local alsa_cards = io.popen('cat /proc/asound/cards 2>&1')
+  
   array_of_inputs = valid_device_name(get_inputs_list)
-  table.insert(array_of_inputs, 1, "Default")
   array_of_outputs = valid_device_name(get_outputs_list)
+  
+  -- Alternative detection using /proc/asound/cards
+  if alsa_cards then
+    print("Connecto Mod: Checking /proc/asound/cards...")
+    repeat
+      local line = alsa_cards:read("*l")
+      if line then
+        print("Connecto Mod: Card line:", line)
+        -- Look for USB audio devices
+        if line:match("USB") or line:match("Audio") then
+          local card_match = line:match("^%s*(%d+)")
+          if card_match then
+            local card_num = tonumber(card_match)
+            if card_num and card_num > 0 then
+              local card_id_file = io.open("/proc/asound/card" .. card_num .. "/id", "r")
+              if card_id_file then
+                local card_id = card_id_file:read("*l")
+                card_id_file:close()
+                if card_id and card_id ~= "sndrpimonome" then
+                  -- Add to both input and output arrays if not already present
+                  local function add_if_missing(device_array, device_name)
+                    local exists = false
+                    for _, existing in ipairs(device_array) do
+                      if existing == device_name then
+                        exists = true
+                        break
+                      end
+                    end
+                    if not exists then
+                      table.insert(device_array, device_name)
+                    end
+                  end
+                  
+                  add_if_missing(array_of_inputs, card_id)
+                  add_if_missing(array_of_outputs, card_id)
+                end
+              end
+            end
+          end
+        end
+      end
+    until not line
+    alsa_cards:close()
+  end
+  
+  -- Always add Default as first option
+  table.insert(array_of_inputs, 1, "Default")
   table.insert(array_of_outputs, 1, "Default")
   
+  print("Connecto Mod: Final device lists:")
   for i=1, #array_of_inputs do
     print('Connecto Mod: Input Device: '..i..' > '..array_of_inputs[i])
   end
   for i=1, #array_of_outputs do
     print('Connecto Mod: Output Device: '..i..' > '..array_of_outputs[i])
   end
+  
+  -- Close the popen handles
+  if get_inputs_list then get_inputs_list:close() end
+  if get_outputs_list then get_outputs_list:close() end
 end
 
 -- Save configuration to file
@@ -251,6 +350,21 @@ m.enc = function(n, d)
   mod.menu.redraw()
 end
 
+-- Add a manual refresh function
+local function manual_refresh()
+  print("Connecto Mod: Manual refresh triggered")
+  refresh_list_of_devices()
+  -- Reset indices to safe values
+  state.input_device_index = math.min(state.input_device_index, #array_of_inputs)
+  state.output_device_index = math.min(state.output_device_index, #array_of_outputs)
+  state.input_device = array_of_inputs[state.input_device_index] or "Default"
+  state.output_device = array_of_outputs[state.output_device_index] or "Default"
+  mod.menu.redraw()
+end
+
+-- Add refresh to the menu
+m.refresh = manual_refresh
+
 m.redraw = function()
   screen.clear()
   
@@ -269,6 +383,7 @@ m.redraw = function()
     local y2 = 30
     local y3 = 40
     local y4 = 50
+    local y5 = 60
     local level_min = 3
     
     -- Draw labels
@@ -309,6 +424,12 @@ m.redraw = function()
     else
       screen.text_center("Press K1 to connect")
     end
+    
+    -- Draw debug info
+    screen.level(2)
+    screen.font_size(6)
+    screen.move(64, y5)
+    screen.text_center("Devices: " .. #array_of_inputs .. " input, " .. #array_of_outputs .. " output")
     
     -- Draw frame
     screen.level(8)
