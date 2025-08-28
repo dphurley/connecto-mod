@@ -1,126 +1,138 @@
-# Connecto Mod
+# Connecto Mod for Norns
 
-A Norns mod for connecting to USB audio interfaces, converted from the original connecto script.
+A Norns mod that enables connection to USB audio interfaces, allowing you to use external audio hardware with your Norns device.
 
-## Description
+## What It Does
 
-Connecto Mod allows your Norns device to connect to USB audio interfaces, providing:
-- Automatic USB audio interface detection
-- Easy connection management
-- Configurable audio settings (sample rate, channels)
-- Support for common USB audio interfaces
+The Connecto Mod automatically detects and connects to USB audio interfaces when scripts start up, providing seamless integration with external audio hardware. It handles:
+
+- USB audio interface detection
+- Automatic connection management
+- Audio routing configuration
+- Interface status monitoring
 
 ## Installation
 
-### Method 1: Using the Installation Script (Recommended)
-1. Clone this repository to your Norns device:
+### Quick Install (Recommended)
+
+1. **Clone the repository on your Norns:**
    ```bash
    cd ~/dust/code
    git clone https://github.com/dphurley/connecto-mod.git
-   ```
-
-2. Run the installation script:
-   ```bash
    cd connecto-mod
-   ./install.sh
    ```
 
-3. Restart your Norns (SYSTEM → RESTART)
-
-### Method 2: Manual Installation
-1. Clone this repository to your Norns device:
+2. **Run the installation script:**
    ```bash
-   cd ~/dust/code
-   git clone https://github.com/dphurley/connecto-mod.git
+   ./quick_install.sh
    ```
 
-2. Copy the mod files to the correct location:
+3. **Restart your Norns:**
+   - Go to `SYSTEM > RESTART`
+   - Wait for the system to fully restart
+
+4. **Enable the mod:**
+   - Go to `SYSTEM > MODS`
+   - Find "connecto" in the list
+   - Use `E2` to select it, then `E3` to enable it
+   - Restart again to activate the mod
+
+### Manual Installation
+
+If you prefer to install manually:
+
+1. **Create the mod directory:**
    ```bash
-   mkdir -p ~/dust/mods/connecto
-   cp -r connecto-mod/lib ~/dust/mods/connecto/
-   cp connecto-mod/config.lua ~/dust/mods/connecto/
+   mkdir -p ~/dust/code/connecto
    ```
 
-3. Restart your Norns (SYSTEM → RESTART)
+2. **Copy the mod files:**
+   ```bash
+   cp -r lib ~/dust/code/connecto/
+   ```
 
-### Method 3: Using Norns Community Mods
-*Coming soon - this mod will be available through the Norns Community Mods system*
+3. **Follow steps 3-4 from Quick Install above**
 
 ## Mod Structure
 
-This mod follows the official Monome mod structure:
+The mod follows the official Norns mod structure:
+
 ```
-~/dust/mods/connecto/
-├── lib/
-│   └── mod.lua          # Main mod file (REQUIRED)
-└── config.lua            # Configuration file
+~/dust/code/connecto/
+└── lib/
+    ├── mod.lua              # Main mod file (REQUIRED)
+    └── audio_interface.lua  # Audio interface management
 ```
 
 ## Usage
 
-### Enabling the Mod
-1. Install the mod on your Norns device
-2. Restart your Norns (SYSTEM → RESTART)
-3. Go to SYSTEM → MODS
-4. Find "connecto" in the list and enable it using E2/E3
-5. Restart again to activate the mod
+Once installed and enabled, the Connecto Mod will:
 
-### Basic Usage
-Once enabled, the mod will:
-- Automatically scan for available USB audio interfaces
-- Provide hooks for script initialization and cleanup
-- Offer a menu interface accessible via SYSTEM → MODS
+- Automatically scan for USB audio interfaces on system startup
+- Connect to available interfaces when scripts initialize
+- Provide audio routing capabilities to all scripts
+- Handle interface disconnection and reconnection
 
-### Supported Interfaces
-The mod is designed to work with common USB audio interfaces including:
+## Supported Interfaces
+
+The mod is designed to work with standard USB audio interfaces including:
+
 - Focusrite Scarlett series
 - Behringer U-Phoria series
-- Native Instruments audio interfaces
-- RME USB interfaces
-- Universal Audio interfaces
-- Apogee USB interfaces
-- Motu USB interfaces
+- Native Instruments Audio interfaces
+- Generic USB audio devices
+- Class-compliant USB audio interfaces
 
-### Configuration
-The mod can be configured through the `config.lua` file or through the mod's interface:
-- Default sample rate and channel count
-- Preferred interface list
-- Auto-connection settings
-- Connection timeout and retry settings
+## Configuration
+
+The mod can be configured through the `SYSTEM > MODS` menu:
+
+- **E2**: Navigate through options
+- **E3**: Select/confirm options
+- **K3**: Enter the mod's menu (if available)
 
 ## Development Status
 
-⚠️ **Work in Progress** ⚠️
+🚧 **Work in Progress**
 
-This mod is currently under development. The following features are planned:
-- [ ] USB audio interface detection implementation
-- [ ] ALSA integration for audio routing
-- [ ] User interface for connection management
-- [ ] Configuration persistence
-- [ ] Error handling and recovery
-- [ ] Testing with various USB audio interfaces
+This mod is currently under development. Planned features include:
+
+- [x] Basic mod structure and hooks
+- [x] USB audio interface detection framework
+- [x] Installation scripts
+- [ ] ALSA integration for interface detection
+- [ ] Audio routing implementation
+- [ ] Interface configuration options
+- [ ] Status monitoring and display
 
 ## Contributing
 
-Contributions are welcome! This mod is designed to be modular and extensible. Areas that need work include:
-- Audio interface detection logic
-- ALSA integration
-- User interface development
-- Testing with different hardware
+Contributions are welcome! This mod is designed to be:
+
+- **Modular**: Easy to extend with new features
+- **Compatible**: Works with existing Norns scripts
+- **Reliable**: Stable operation across different hardware
+
+To contribute:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test thoroughly on Norns hardware
+5. Submit a pull request
 
 ## License
 
-MIT License - see LICENSE file for details
+MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Acknowledgments
 
-- Based on the original "connecto" Norns script
-- Built for the Norns platform by Monome
-- Community-driven development
+- Monome team for the Norns platform and mod system
+- Norns community for testing and feedback
+- Original Connecto script developers for the concept
 
 ## Support
 
-For issues, questions, or contributions:
-- Open an issue on GitHub
-- Check the Norns community forums
-- Join the Norns Discord server
+For issues or questions:
+- Check the [Issues](https://github.com/dphurley/connecto-mod/issues) page
+- Review the [Roadmap](ROADMAP.md) for development plans
+- Consult the Norns documentation for mod development
