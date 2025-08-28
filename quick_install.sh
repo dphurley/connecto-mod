@@ -17,9 +17,9 @@ if [ ! -d "$SCRIPT_DIR/connecto" ]; then
     exit 1
 fi
 
-# Navigate to Norns code directory
-echo "📂 Installing to ~/dust/code/connecto..."
-cd ~/dust/code
+# Navigate to Norns mods directory (not code directory)
+echo "📂 Installing to ~/dust/mods/connecto..."
+cd ~/dust/mods
 
 # Remove existing mod if it exists
 if [ -d "connecto" ]; then
@@ -42,4 +42,6 @@ echo "Next steps:"
 echo "1. Restart your Norns (SYSTEM → RESTART)"
 echo "2. The mod will be available in your mod system"
 echo ""
-echo "Mod location: ~/dust/code/connecto"
+echo "Mod location: ~/dust/mods/connecto"
+echo ""
+echo "Note: Norns mods go in ~/dust/mods/, not ~/dust/code/"

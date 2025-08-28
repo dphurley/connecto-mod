@@ -36,7 +36,7 @@ Connecto Mod allows your Norns device to connect to USB audio interfaces, provid
 
 2. Copy the mod folder to the correct location:
    ```bash
-   cp -r connecto-mod/connecto ~/dust/code/
+   cp -r connecto-mod/connecto ~/dust/mods/
    ```
 
 3. Restart your Norns (SYSTEM → RESTART)
