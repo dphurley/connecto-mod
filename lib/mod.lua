@@ -5,6 +5,7 @@
 --
 
 local mod = require('core/mods')
+local util = require('util')
 
 -- State variables
 local state = {
@@ -328,8 +329,8 @@ m.deinit = function()
   print("Connecto Mod: menu deinitialized")
 end
 
--- Register the menu
-mod.menu.register(mod.this_name, m)
+-- Register the menu with a specific name
+mod.menu.register("connecto", m)
 
 -- Return the mod table
 return mod
