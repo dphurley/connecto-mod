@@ -22,29 +22,30 @@ if [[ "$(hostname)" == "norns" ]]; then
         rm -rf connecto
     fi
     
-    # Copy the mod files from the script directory
+    # Create mod directory and copy files
     echo "📁 Installing mod files..."
-    if [ -d "$SCRIPT_DIR/connecto" ]; then
-        cp -r "$SCRIPT_DIR/connecto" .
-        echo "✓ Mod files copied successfully"
-    else
-        echo "❌ Error: connecto directory not found in $SCRIPT_DIR"
-        echo "Current directory contents:"
-        ls -la "$SCRIPT_DIR"
-        exit 1
-    fi
+    mkdir connecto
+    cp -r "$SCRIPT_DIR/lib" connecto/
+    cp "$SCRIPT_DIR/config.lua" connecto/
+    
+    echo "✓ Mod files copied successfully"
     
     # Set proper permissions
     chmod -R 755 connecto
     
     echo "✅ Mod installed successfully!"
     echo ""
+    echo "Mod structure:"
+    echo "~/dust/mods/connecto/"
+    echo "├── lib/"
+    echo "│   └── mod.lua          # Main mod file (REQUIRED)"
+    echo "└── config.lua"
+    echo ""
     echo "To use the mod:"
     echo "1. Restart your Norns (SYSTEM → RESTART)"
-    echo "2. The mod will be available in your mod system"
-    echo "3. Check the README.md for usage instructions"
-    echo ""
-    echo "Note: Norns mods go in ~/dust/mods/, not ~/dust/code/"
+    echo "2. Go to SYSTEM → MODS to enable the mod"
+    echo "3. The mod will be available in your mod system"
+    echo "4. Check the README.md for usage instructions"
     
 else
     echo "❌ This script should be run on your Norns device"
@@ -52,6 +53,6 @@ else
     echo "To install manually:"
     echo "1. SSH into your Norns: ssh norns@[IP_ADDRESS]"
     echo "2. Navigate to: cd ~/dust/mods"
-    echo "3. Copy the 'connecto' folder to that location"
+    echo "3. Create connecto directory and copy lib/mod.lua"
     echo "4. Restart your Norns"
 fi

@@ -12,6 +12,17 @@ local interface_info = {
   is_connected = false
 }
 
+-- List of common USB audio interfaces
+local common_interfaces = {
+  "Focusrite Scarlett",
+  "Behringer U-Phoria",
+  "Native Instruments",
+  "RME",
+  "Universal Audio",
+  "Apogee",
+  "Motu"
+}
+
 -- Detect available audio interfaces
 function audio_interface.detect()
   local interfaces = {}

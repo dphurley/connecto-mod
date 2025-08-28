@@ -10,14 +10,7 @@ echo "========================================="
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo "📁 Script location: $SCRIPT_DIR"
 
-# Check if connecto directory exists
-if [ ! -d "$SCRIPT_DIR/connecto" ]; then
-    echo "❌ Error: connecto directory not found!"
-    echo "Make sure you're running this from the connecto-mod repository root"
-    exit 1
-fi
-
-# Navigate to Norns mods directory (not code directory)
+# Navigate to Norns mods directory
 echo "📂 Installing to ~/dust/mods/connecto..."
 cd ~/dust/mods
 
@@ -27,9 +20,13 @@ if [ -d "connecto" ]; then
     rm -rf connecto
 fi
 
-# Copy the mod
+# Create mod directory
+mkdir connecto
+
+# Copy the mod files to the correct structure
 echo "📋 Copying mod files..."
-cp -r "$SCRIPT_DIR/connecto" .
+cp -r "$SCRIPT_DIR/lib" connecto/
+cp "$SCRIPT_DIR/config.lua" connecto/
 
 # Set permissions
 echo "🔐 Setting permissions..."
@@ -38,10 +35,13 @@ chmod -R 755 connecto
 echo ""
 echo "✅ Connecto Mod installed successfully!"
 echo ""
+echo "Mod structure:"
+echo "~/dust/mods/connecto/"
+echo "├── lib/"
+echo "│   └── mod.lua          # Main mod file (REQUIRED)"
+echo "└── config.lua"
+echo ""
 echo "Next steps:"
 echo "1. Restart your Norns (SYSTEM → RESTART)"
-echo "2. The mod will be available in your mod system"
-echo ""
-echo "Mod location: ~/dust/mods/connecto"
-echo ""
-echo "Note: Norns mods go in ~/dust/mods/, not ~/dust/code/"
+echo "2. Go to SYSTEM → MODS to enable the mod"
+echo "3. The mod will be available in your mod system"

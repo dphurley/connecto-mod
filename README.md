@@ -34,9 +34,11 @@ Connecto Mod allows your Norns device to connect to USB audio interfaces, provid
    git clone https://github.com/dphurley/connecto-mod.git
    ```
 
-2. Copy the mod folder to the correct location:
+2. Copy the mod files to the correct location:
    ```bash
-   cp -r connecto-mod/connecto ~/dust/mods/
+   mkdir -p ~/dust/mods/connecto
+   cp -r connecto-mod/lib ~/dust/mods/connecto/
+   cp connecto-mod/config.lua ~/dust/mods/connecto/
    ```
 
 3. Restart your Norns (SYSTEM → RESTART)
@@ -44,13 +46,30 @@ Connecto Mod allows your Norns device to connect to USB audio interfaces, provid
 ### Method 3: Using Norns Community Mods
 *Coming soon - this mod will be available through the Norns Community Mods system*
 
+## Mod Structure
+
+This mod follows the official Monome mod structure:
+```
+~/dust/mods/connecto/
+├── lib/
+│   └── mod.lua          # Main mod file (REQUIRED)
+└── config.lua            # Configuration file
+```
+
 ## Usage
 
-### Basic Usage
+### Enabling the Mod
 1. Install the mod on your Norns device
-2. The mod will automatically scan for available USB audio interfaces
-3. Use the mod's interface to connect to your preferred audio interface
-4. Configure sample rate and channel settings as needed
+2. Restart your Norns (SYSTEM → RESTART)
+3. Go to SYSTEM → MODS
+4. Find "connecto" in the list and enable it using E2/E3
+5. Restart again to activate the mod
+
+### Basic Usage
+Once enabled, the mod will:
+- Automatically scan for available USB audio interfaces
+- Provide hooks for script initialization and cleanup
+- Offer a menu interface accessible via SYSTEM → MODS
 
 ### Supported Interfaces
 The mod is designed to work with common USB audio interfaces including:
