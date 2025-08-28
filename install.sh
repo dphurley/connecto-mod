@@ -10,6 +10,9 @@ echo "======================================"
 if [[ "$(hostname)" == "norns" ]]; then
     echo "✓ Running on Norns device"
     
+    # Get the directory where this script is located
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    
     # Navigate to the correct directory
     cd ~/dust/code
     
@@ -19,12 +22,20 @@ if [[ "$(hostname)" == "norns" ]]; then
         rm -rf connecto
     fi
     
-    # Copy the mod files
+    # Copy the mod files from the script directory
     echo "📁 Installing mod files..."
-    cp -r connecto ~/dust/code/
+    if [ -d "$SCRIPT_DIR/connecto" ]; then
+        cp -r "$SCRIPT_DIR/connecto" .
+        echo "✓ Mod files copied successfully"
+    else
+        echo "❌ Error: connecto directory not found in $SCRIPT_DIR"
+        echo "Current directory contents:"
+        ls -la "$SCRIPT_DIR"
+        exit 1
+    fi
     
     # Set proper permissions
-    chmod -R 755 ~/dust/code/connecto
+    chmod -R 755 connecto
     
     echo "✅ Mod installed successfully!"
     echo ""
