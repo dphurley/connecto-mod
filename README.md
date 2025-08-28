@@ -12,16 +12,36 @@ Connecto Mod allows your Norns device to connect to USB audio interfaces, provid
 
 ## Installation
 
-### Method 1: Manual Installation
+### Method 1: Using the Installation Script (Recommended)
 1. Clone this repository to your Norns device:
    ```bash
    cd ~/dust/code
    git clone https://github.com/dphurley/connecto-mod.git
    ```
 
-2. Restart your Norns or reload the mod system
+2. Run the installation script:
+   ```bash
+   cd connecto-mod
+   ./install.sh
+   ```
 
-### Method 2: Using Norns Community Mods
+3. Restart your Norns (SYSTEM → RESTART)
+
+### Method 2: Manual Installation
+1. Clone this repository to your Norns device:
+   ```bash
+   cd ~/dust/code
+   git clone https://github.com/dphurley/connecto-mod.git
+   ```
+
+2. Copy the mod folder to the correct location:
+   ```bash
+   cp -r connecto-mod/connecto ~/dust/code/
+   ```
+
+3. Restart your Norns (SYSTEM → RESTART)
+
+### Method 3: Using Norns Community Mods
 *Coming soon - this mod will be available through the Norns Community Mods system*
 
 ## Usage

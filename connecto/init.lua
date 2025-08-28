@@ -1,6 +1,8 @@
--- Connecto Mod
--- A Norns mod for connecting to USB audio interfaces
--- Based on the original connecto script
+-- Connecto Mod for Norns
+-- A mod for connecting to USB audio interfaces
+
+local mod = require("core/mod")
+local mod_hooks = mod.hooks
 
 local connecto = {}
 
@@ -66,5 +68,7 @@ function connecto.cleanup()
   print("Connecto mod cleaned up")
 end
 
--- Return the mod table
+-- Register the mod with Norns
+mod_hooks.register("connecto", connecto)
+
 return connecto
